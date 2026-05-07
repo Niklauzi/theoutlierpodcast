@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Outliers Podcast — Real conversations on healthcare, AI, data, work culture, and growth. A Nigerian podcast with different perspectives and real impact.">
+<meta name="keywords" content="podcast, healthcare, AI, data, Nigeria, self improvement, work culture, ownership, outliers podcast">
+<meta property="og:title" content="The Outliers Podcast">
+<meta property="og:description" content="Different perspectives. Real conversations. Real impact.">
+<title>The Outliers — A Nigerian Podcast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00FF88;
+    --green-dim: #00cc6a;
+    --green-glow: rgba(0,255,136,0.15);
+    --green-glow-strong: rgba(0,255,136,0.35);
+    --bg: #080808;
+    --bg2: #0e0e0e;
+    --bg3: #141414;
+    --border: rgba(0,255,136,0.12);
+    --text: #f0f0f0;
+    --muted: #888;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── STICKY HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+  .header-logo span { color: var(--green); }
+
+  .header-cta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-family: var(--font-cond);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: #000;
+  }
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px var(--green-glow-strong);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+  }
+  .btn-outline:hover {
+    background: var(--green-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 24px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,136,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(0,255,136,0.04) 0%, transparent 50%),
+      linear-gradient(180deg, #080808 0%, #0a0a0a 100%);
+    z-index: 0;
+  }
+
+  /* grid lines */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, black 0%, transparent 70%);
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .hero-kicker {
+    display: inline-block;
+    font-family: var(--font-cond);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    background: var(--green-glow);
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.8rem, 14vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 6px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero-title .accent { color: var(--green); }
+
+  .hero-tagline {
+    font-family: var(--font-cond);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+  .hero-tagline span { color: var(--green); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 3.5vw, 1.15rem);
+    color: rgba(240,240,240,0.7);
+    max-width: 480px;
+    margin: 0 auto 36px;
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeDown 0.6s 0.4s ease both;
+  }
+
+  .hero-ctas .btn { padding: 14px 28px; font-size: 0.9rem; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: fadeDown 0.6s 0.7s ease both;
+  }
+  .scroll-hint span {
+    font-family: var(--font-cond);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(var(--green), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+
+  /* ── SECTIONS SHARED ── */
+  section { padding: 80px 24px; }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-cond);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--green);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 7vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 20px;
+  }
+
+  /* ── ABOUT ── */
+  .about { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 36px;
+  }
+
+  .about-card {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .about-card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+  }
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .about-card:hover::before { opacity: 1; }
+
+  .about-card-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--green);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .about-card h3 {
+    font-family: var(--font-cond);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .about-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── TOPICS ── */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .topic-card {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg2);
+    cursor: default;
+    transition: all 0.25s;
+    padding: 16px 8px;
+  }
+  .topic-card:hover {
+    border-color: var(--green);
+    background: var(--bg3);
+    box-shadow: 0 0 30px var(--green-glow);
+    transform: scale(1.03);
+  }
+  .topic-icon {
+    font-size: 1.8rem;
+    filter: grayscale(1) brightness(1.2);
+    transition: filter 0.2s;
+  }
+  .topic-card:hover .topic-icon { filter: none; }
+  .topic-label {
+    font-family: var(--font-cond);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    transition: color 0.2s;
+  }
+  .topic-card:hover .topic-label { color: var(--green); }
+
+  /* ── EPISODES ── */
+  .episodes { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .episodes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 36px;
+  }
+
+  .ep-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 20px;
+    background: var(--bg3);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .ep-card:hover {
+    border-color: var(--border);
+    background: #1a1a1a;
+    transform: translateX(4px);
+  }
+
+  .ep-num {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--green);
+    opacity: 0.4;
+    min-width: 42px;
+    transition: opacity 0.2s;
+  }
+  .ep-card:hover .ep-num { opacity: 1; }
+
+  .ep-info { flex: 1; min-width: 0; }
+  .ep-tag {
+    font-family: var(--font-cond);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+  .ep-title {
+    font-family: var(--font-cond);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ep-hook {
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ep-play {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--green-glow);
+    border: 1px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .ep-play svg { fill: var(--green); margin-left: 2px; }
+  .ep-card:hover .ep-play {
+    background: var(--green);
+  }
+  .ep-card:hover .ep-play svg { fill: #000; }
+
+  /* ── WHY LISTEN ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .why-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg2);
+  }
+  .why-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-top: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--green);
+  }
+  .why-item h4 {
+    font-family: var(--font-cond);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .why-item p { font-size: 0.85rem; color: var(--muted); }
+
+  /* ── SOCIAL PROOF ── */
+  .social-proof {
+    text-align: center;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .social-proof .section-label { justify-content: center; }
+  .social-proof .section-label::before { display: none; }
+
+  .proof-big {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 10vw, 5.5rem);
+    color: var(--text);
+    line-height: 1;
+    margin: 8px 0 4px;
+  }
+  .proof-big span { color: var(--green); }
+
+  .proof-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* ── FOLLOW ── */
+  .follow { text-align: center; }
+
+  .follow-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .follow-buttons .btn { padding: 13px 24px; }
+
+  .btn-spotify { background: #1DB954; color: #000; }
+  .btn-spotify:hover { background: #1ed760; transform: translateY(-2px); }
+
+  .btn-youtube { background: #FF0000; color: #fff; }
+  .btn-youtube:hover { background: #ff3333; transform: translateY(-2px); }
+
+  .btn-tiktok { background: #010101; color: #fff; border: 1px solid rgba(255,255,255,0.15); }
+  .btn-tiktok:hover { background: #1a1a1a; transform: translateY(-2px); }
+
+  .btn-instagram {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #fff;
+  }
+  .btn-instagram:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* ── EMAIL ── */
+  .email-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .email-section .section-label { justify-content: center; }
+  .email-section .section-label::before { display: none; }
+
+  .email-section .section-title { margin-bottom: 8px; }
+  .email-section p { color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; max-width: 380px; margin-left: auto; margin-right: auto; }
+
+  .email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .email-input {
+    padding: 14px 18px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .email-input::placeholder { color: var(--muted); }
+  .email-input:focus { border-color: var(--green); }
+
+  .email-form .btn-primary { width: 100%; justify-content: center; padding: 14px; font-size: 0.9rem; }
+
+  .email-note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .footer-logo span { color: var(--green); }
+
+  .footer-tagline {
+    font-family: var(--font-cond);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .footer-links a {
+    font-family: var(--font-cond);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--green); }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(136,136,136,0.5);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0.15;
+    margin: 0;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50%       { opacity: 0.3; transform: scaleY(0.6); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── TABLET ── */
+  @media (min-width: 600px) {
+    .about-grid { grid-template-columns: repeat(3, 1fr); }
+    .topics-grid { grid-template-columns: repeat(3, 1fr); }
+    .why-grid { grid-template-columns: repeat(2, 1fr); }
+    .email-form { flex-direction: row; }
+    .email-form .btn-primary { width: auto; flex-shrink: 0; }
+  }
+
+  @media (min-width: 768px) {
+    section { padding: 100px 40px; }
+    .topics-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .topic-card { aspect-ratio: auto; padding: 24px 12px; }
+    header { padding: 16px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<header>
+  <div class="header-logo">THE <span>OUT</span>LIERS</div>
+  <div class="header-cta">
+    <a href="#follow" class="btn btn-primary">Listen Now</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">A Nigerian Podcast</div>
+    <h1 class="hero-title">THE<br><span class="accent">OUT</span>LIERS</h1>
+    <p class="hero-tagline">Different perspectives. Real conversations. <span>Real impact.</span></p>
+    <p class="hero-sub">Conversations on healthcare, AI, data, work culture, and growth.</p>
+    <div class="hero-ctas">
+      <a href="https://open.spotify.com" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Listen on Spotify
+      </a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        Watch on YouTube
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="section-inner">
+    <p class="section-label reveal">What This Is</p>
+    <h2 class="section-title reveal">Built different.<br>Sounds different.</h2>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <div class="about-card-num">01</div>
+        <h3>Real Conversations</h3>
+        <p>No scripts. No fluff. Just honest conversations with people doing the work.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-num">02</div>
+        <h3>Data-Driven Thinking</h3>
+        <p>We follow the evidence. Numbers tell stories. We help you read them.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-num">03</div>
+        <h3>Cross-Industry Insight</h3>
+        <p>Healthcare meets AI. Data meets culture. The overlap is where the gold is.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOPICS -->
+<section>
+  <div class="section-inner">
+    <p class="section-label reveal">What We Cover</p>
+    <h2 class="section-title reveal">Six pillars.<br>Zero compromise.</h2>
+    <div class="topics-grid">
+      <div class="topic-card reveal">
+        <div class="topic-icon">🧠</div>
+        <div class="topic-label">Self<br>Improvement</div>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon">📊</div>
+        <div class="topic-label">Data</div>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon">🤖</div>
+        <div class="topic-label">AI</div>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon">🏥</div>
+        <div class="topic-label">Healthcare</div>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon">💼</div>
+        <div class="topic-label">Work<br>Culture</div>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon">🔑</div>
+        <div class="topic-label">Ownership</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EPISODES -->
+<section class="episodes">
+  <div class="section-inner">
+    <p class="section-label reveal">Episodes</p>
+    <h2 class="section-title reveal">Start here.</h2>
+    <div class="episodes-list">
+      <a href="#" class="ep-card reveal">
+        <div class="ep-num">01</div>
+        <div class="ep-info">
+          <div class="ep-tag">AI · Healthcare</div>
+          <div class="ep-title">AI Won't Replace Doctors — But Doctors Using AI Will Replace Those Who Don't</div>
+          <div class="ep-hook">What clinical AI actually looks like in Nigerian hospitals today.</div>
+        </div>
+        <div class="ep-play">
+          <svg width="10" height="12" viewBox="0 0 10 12"><path d="M0 0l10 6-10 6V0z"/></svg>
+        </div>
+      </a>
+      <a href="#" class="ep-card reveal">
+        <div class="ep-num">02</div>
+        <div class="ep-info">
+          <div class="ep-tag">Data · Ownership</div>
+          <div class="ep-title">Your Data Is Your Business — Stop Giving It Away for Free</div>
+          <div class="ep-hook">How to turn what you already know into income and influence.</div>
+        </div>
+        <div class="ep-play">
+          <svg width="10" height="12" viewBox="0 0 10 12"><path d="M0 0l10 6-10 6V0z"/></svg>
+        </div>
+      </a>
+      <a href="#" class="ep-card reveal">
+        <div class="ep-num">03</div>
+        <div class="ep-info">
+          <div class="ep-tag">Work Culture</div>
+          <div class="ep-title">The 9-to-5 Is a Cage. Here's Who Holds the Keys.</div>
+          <div class="ep-hook">Why the smartest people are redesigning how they work — not just where.</div>
+        </div>
+        <div class="ep-play">
+          <svg width="10" height="12" viewBox="0 0 10 12"><path d="M0 0l10 6-10 6V0z"/></svg>
+        </div>
+      </a>
+      <a href="#" class="ep-card reveal">
+        <div class="ep-num">04</div>
+        <div class="ep-info">
+          <div class="ep-tag">Self Improvement</div>
+          <div class="ep-title">Stop Consuming. Start Building. Here's the Mental Switch.</div>
+          <div class="ep-hook">The discipline gap between people who talk and people who ship.</div>
+        </div>
+        <div class="ep-play">
+          <svg width="10" height="12" viewBox="0 0 10 12"><path d="M0 0l10 6-10 6V0z"/></svg>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY LISTEN -->
+<section>
+  <div class="section-inner">
+    <p class="section-label reveal">Why Listen</p>
+    <h2 class="section-title reveal">Built for people<br>who think for themselves.</h2>
+    <div class="why-grid">
+      <div class="why-item reveal">
+        <div class="why-bullet"></div>
+        <div>
+          <h4>Real-World Insight</h4>
+          <p>Every episode is grounded in practice, not theory. We talk to people doing it — not people talking about it.</p>
+        </div>
+      </div>
+      <div class="why-item reveal">
+        <div class="why-bullet"></div>
+        <div>
+          <h4>Practical Takeaways</h4>
+          <p>You leave every episode with something you can act on — today, not someday.</p>
+        </div>
+      </div>
+      <div class="why-item reveal">
+        <div class="why-bullet"></div>
+        <div>
+          <h4>Expert-Level Thinking</h4>
+          <p>We don't simplify to the point of uselessness. We trust your intelligence.</p>
+        </div>
+      </div>
+      <div class="why-item reveal">
+        <div class="why-bullet"></div>
+        <div>
+          <h4>No Generic Advice</h4>
+          <p>If you can Google it, we won't say it. Every conversation is earned perspective.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof">
+  <div class="section-inner">
+    <p class="section-label reveal">The Movement</p>
+    <div class="proof-big reveal">JOIN THE<br><span>OUTLIERS</span></div>
+    <p class="proof-sub reveal">Thinkers, builders, and doers thinking differently — across Africa and beyond.</p>
+    <a href="#follow" class="btn btn-primary reveal" style="margin: 0 auto;">Follow the Podcast</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOLLOW -->
+<section class="follow" id="follow">
+  <div class="section-inner">
+    <p class="section-label reveal" style="justify-content: center;"><span style="display:none"></span>Find Us Everywhere</p>
+    <h2 class="section-title reveal">Pick your platform.<br>Start listening.</h2>
+    <div class="follow-buttons">
+      <a href="https://open.spotify.com" target="_blank" rel="noopener" class="btn btn-spotify reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Spotify
+      </a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" class="btn btn-youtube reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        YouTube
+      </a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener" class="btn btn-tiktok reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.77a4.85 4.85 0 01-1.02-.08z"/></svg>
+        TikTok
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" class="btn btn-instagram reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-section">
+  <div class="section-inner">
+    <p class="section-label reveal">Stay Sharp</p>
+    <h2 class="section-title reveal">Insights that<br>actually matter.</h2>
+    <p class="reveal">New episodes, key takeaways, and perspectives you won't find elsewhere.</p>
+    <div class="email-form reveal">
+      <input type="email" class="email-input" placeholder="your@email.com">
+      <a href="#" class="btn btn-primary">Subscribe</a>
+    </div>
+    <p class="email-note reveal">No spam. Unsubscribe any time.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">THE <span>OUT</span>LIERS</div>
+  <p class="footer-tagline">Different perspectives. Real conversations. Real impact.</p>
+  <div class="footer-links">
+    <a href="https://open.spotify.com" target="_blank" rel="noopener">Spotify</a>
+    <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2025 The Outliers Podcast. A Nigerian Podcast. Life. Work. Growth. Impact.</p>
+</footer>
+
+<script>
+  // Intersection observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger sibling reveals
+  document.querySelectorAll('.about-grid, .topics-grid, .episodes-list, .why-grid, .follow-buttons').forEach(container => {
+    const children = container.querySelectorAll('.reveal');
+    children.forEach((child, i) => {
+      child.style.transitionDelay = `${i * 60}ms`;
+    });
+  });
+
+  // Email form
+  document.querySelector('.email-form .btn-primary').addEventListener('click', (e) => {
+    e.preventDefault();
+    const input = document.querySelector('.email-input');
+    if (input.value && input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = 'You\'re in. Welcome to the outliers.';
+      e.target.textContent = 'Done ✓';
+      e.target.style.background = '#00cc6a';
+    }
+  });
+</script>
+</body>
+</html>
